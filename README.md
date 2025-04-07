@@ -58,7 +58,7 @@ local git_menu = {
     text = '⏬Checkout branch',
     handler = package.loaded.snacks.picker.git_branches,
   },
-} -- }}}
+}
 
 M.main_menu = {
   {
