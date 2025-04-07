@@ -41,21 +41,26 @@ local execute_entry = function(entry)
 	end
 end
 
-local _format_entry = function(entry)
-	return entry.text or entry.command or entry.cmd or "undefined"
-end
-
 --- Displays a menu using the configured menu system
---- @param options table|nil List of menu "entries". If nil, uses the default menusystem
---- @param label string|nil The label for the menu. If nil, uses "Main menu"
+--- @param options table|nil List of menu entries. If nil, uses the default menusystem
 --- @usage M.menu({{text = 'quit', cmd = 'quit'}, {text = 'world', command = 'echo world'}, {text = 'notify', handler = function() vim.notify('hello') end}})
 M.menu = function(options, label)
 	options = options or menusystem
 	label = label or "Main menu"
 
+	for _, command in ipairs(options) do
+		if not command.text then
+			command.text = command.command or command.cmd
+		end
+	end
 	vim.ui.select(options, {
 		prompt = label,
-		format_item = format_entry,
+		format_item = function(item)
+			if item.text then
+				return item.text
+			end
+			return item.command or item.cmd
+		end,
 	}, execute_entry)
 end
 
