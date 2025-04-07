@@ -79,7 +79,7 @@ M.main_menu = {
   },
   { text = ' Silicon', cmd = 'Silicon' },
   { text = ' Copy diff', cmd = '!git diff "%" | wl-copy' },
-  { text = '→ Scp cra', cmd = '!scp "%" cra:/tmp' },
+  { text = '→ Scp cra', command = 'scp "%" cra:/tmp' },
 }
 
 return M
