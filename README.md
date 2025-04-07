@@ -14,8 +14,20 @@ Add to your plugin list:
 # Usage
 
 ```lua
+-- storing menus in a separate file
 vim.keymap.set({ 'n', 'v' }, '<leader>cc', function()
-  require('menus').menu(require('custom.menus').main_menu)
+  local main_menu = require('custom.menus').main_menu
+  require('menus').menu(main_menu)
+end, { desc = '[c]ommands' })
+
+-- inline
+vim.keymap.set({ 'n', 'v' }, '<leader>cd', function()
+  require('menus').menu({
+    { text = ' line history', handler = package.loaded.snacks.picker.git_log_line },
+    { text = ' Add file', cmd = '!git add "%"' },
+    { text = '⏬Checkout branch', handler = package.loaded.snacks.picker.git_branches },
+
+  })
 end, { desc = '[c]ommands' })
 ```
 
