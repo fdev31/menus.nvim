@@ -55,7 +55,7 @@ M.menu = function(options, label)
 
 	vim.ui.select(options, {
 		prompt = label,
-		format_item = format_entry,
+		format_item = _format_entry,
 	}, execute_entry)
 end
 
