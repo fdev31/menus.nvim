@@ -53,7 +53,23 @@ local execute_entry = function(entry, parent)
 	elseif entry.cmd then
 		-- Execute a Vim command, optionally silently.
 		local prefix = (entry.silent and "silent ") or ""
-		vim.cmd(prefix .. entry.cmd)
+		if entry.input then
+			vim.ui.input({
+				prompt = entry.text,
+			}, function(input)
+				if input then
+					-- replace "{input}" with the actual input
+					input = input:gsub("{input}", input)
+					entry.cmd(input)
+				else
+					vim.notify("No input provided", vim.log.levels.WARN, {
+						title = parent .. " " .. entry.text,
+					})
+				end
+			end)
+		else
+			vim.cmd(prefix .. entry.cmd)
+		end
 	elseif entry.command then
 		-- Execute a terminal command.
 		vim.cmd("terminal " .. entry.command)
