@@ -45,6 +45,10 @@ A `text`, which is the (mandatory) text to display, and one of:
 - `handler` - A function to execute
 - `options` - A list of entries to create a sub-menu
 
+# Demo
+
+<iframe width="1744" height="981" src="https://www.youtube.com/embed/BvoI3mE9rFs" title="menus.nvim demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 Complete/real-life example (requires `snacks.picker` and `telescope`):
 
 ```lua
