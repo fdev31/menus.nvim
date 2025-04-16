@@ -38,7 +38,8 @@ Each **Entry** have the following properties:
 A `text`, which is the (mandatory) text to display, and one of:
 
 - `cmd` - A vim command to execute
-- `command` - A shell command to execute (in a terminal buffer)
+  - `silent` - will add the 'silent ' prefix to the `cmd` (will not output anything)
+- `command` - A shell command to execute (in a **terminal** buffer)
 - `handler` - A function to execute
 - `options` - A list of entries to create a sub-menu
 

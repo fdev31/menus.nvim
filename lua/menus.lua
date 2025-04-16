@@ -1,9 +1,3 @@
--- Menu entries:
--- cmd: (str) is for vim commands
--- command: (str) will run in terminal
--- handler: (function) will run lua code
--- <another entry>: (table) for submenus
-
 local M = { config = {} }
 
 local git_menu = { --{{{
@@ -33,7 +27,8 @@ local execute_entry = function(entry)
 	if entry.options then
 		M.menu(entry.options, entry.text)
 	elseif entry.cmd then
-		vim.cmd(entry.cmd)
+		local prefix = (entry.silent and "silent ") or ""
+		vim.cmd(prefix .. entry.cmd)
 	elseif entry.command then
 		vim.cmd("terminal " .. entry.command)
 	elseif entry.handler then
