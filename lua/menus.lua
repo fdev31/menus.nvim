@@ -20,34 +20,55 @@ local menusystem = {
 	{ text = " Copy diff", cmd = '!git diff "%" | wl-copy' },
 }
 
+--- Executes a menu entry based on its type.
+-- @param entry The menu entry to execute. It should be a table containing one of the following keys:
+-- - `options` (for submenus),
+-- - `input` (for user input),
+-- - `cmd` (for Vim commands),
+-- - `command` (for terminal commands),
+-- - `handler` (for custom functions).
+-- @param parent The parent menu's name or identifier, used for context in notifications.
 local execute_entry = function(entry, parent)
 	if not entry then
 		return
 	end
 	if entry.options then
+		-- If the entry has sub-options, open a submenu.
 		M.menu(entry.options, entry.text)
 	elseif entry.input then
+		-- If the entry requires user input, prompt the user.
 		vim.ui.input({
 			prompt = entry.text,
 		}, function(input)
 			if input then
+				-- Call the handler with the provided input.
 				entry.handler(input)
 			else
+				-- Notify the user if no input is provided.
 				vim.notify("No input provided", vim.log.levels.WARN, {
 					title = parent .. " " .. entry.text,
 				})
 			end
 		end)
 	elseif entry.cmd then
+		-- Execute a Vim command, optionally silently.
 		local prefix = (entry.silent and "silent ") or ""
 		vim.cmd(prefix .. entry.cmd)
 	elseif entry.command then
+		-- Execute a terminal command.
 		vim.cmd("terminal " .. entry.command)
 	elseif entry.handler then
+		-- Call a custom handler function.
 		entry.handler()
 	end
 end
 
+--- Formats a menu entry for display.
+-- This function determines the display text for a menu entry by prioritizing
+-- the `text`, `command`, `cmd`, or defaults to "undefined" if none are provided.
+-- @param entry The menu entry to format. It should be a table containing optional keys:
+--  - `text`, `command`, or `cmd`.
+-- @return A string representing the formatted entry text.
 local _format_entry = function(entry)
 	return entry.text or entry.command or entry.cmd or "undefined"
 end
