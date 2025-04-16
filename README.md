@@ -47,7 +47,7 @@ A `text`, which is the (mandatory) text to display, and one of:
 
 # Demo
 
-<iframe width="1744" height="981" src="https://www.youtube.com/embed/BvoI3mE9rFs" title="menus.nvim demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![menus.nvim demo](https://img.youtube.com/vi/BvoI3mE9rFs/0.jpg)](https://www.youtube.com/watch?v=BvoI3mE9rFs)
 
 Complete/real-life example (requires `snacks.picker` and `telescope`):
 
