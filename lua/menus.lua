@@ -59,8 +59,7 @@ local execute_entry = function(entry, parent)
 			}, function(input)
 				if input then
 					-- replace "{input}" with the actual input
-					input = input:gsub("{input}", input)
-					entry.cmd(input)
+					vim.cmd(prefix .. entry.cmd:gsub("{input}", input)
 				else
 					vim.notify("No input provided", vim.log.levels.WARN, {
 						title = parent .. " " .. entry.text,
