@@ -25,6 +25,7 @@ end, { desc = '[c]ommands' })
 -- inline
 vim.keymap.set({ 'n', 'v' }, '<leader>cd', function()
   require('menus').menu({
+    { name = 'text', cmd = 'lua vim.notify "{input}"' , input="notification" },
     { name = ' line history', handler = package.loaded.snacks.picker.git_log_line },
     { name = ' Add file', cmd = '!git add "%"' },
     { name = '⏬Checkout branch', handler = package.loaded.snacks.picker.git_branches },
@@ -41,9 +42,11 @@ A `name`, which is the (mandatory) text to display, and one of:
 
 - `cmd` - (str) A vim command to execute
   - `silent` - (bool) will add the 'silent ' prefix to the `cmd` (will not output anything)
+  - `input` - (str) The title of the prompt asking for user input, the `command` should contain "{input}", that will be replaced by the input content
 - `command` - (str) A shell command to execute (in a **terminal** buffer)
+  - `input` - (str) The title of the prompt asking for user input, the `command` should contain "{input}", that will be replaced by the input content
 - `handler` - (function) code to execute
-  - `input` - (str) The title of the prompt asking for user input, which will be passed in handler
+  - `input` - (str) The title of the prompt asking for user input, which will be passed as a parameter to the handler
 - `options` - (table) A list of entries to create a sub-menu
 
 # Demo

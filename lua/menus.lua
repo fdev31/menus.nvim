@@ -20,6 +20,19 @@ local menusystem = {
 	{ name = " Copy diff", cmd = '!git diff "%" | wl-copy' },
 }
 
+function ask_user(prompt, handler)
+	vim.ui.input({
+		prompt = prompt,
+	}, function(input)
+		if input then
+			handler(input)
+		else
+			vim.notify("No input provided", vim.log.levels.WARN, {
+				title = prompt .. " had no input",
+			})
+		end
+	end)
+end
 --- Executes a menu entry based on its type.
 -- @param entry The menu entry to execute. It should be a table containing one of the following keys:
 -- - `options` (for submenus),
@@ -32,49 +45,33 @@ local execute_entry = function(entry, parent)
 	if not entry then
 		return
 	end
+	local prefix = (entry.silent and "silent ") or ""
 	if entry.options then
 		-- If the entry has sub-options, open a submenu.
-		M.menu(entry.options, entry.name)
-	elseif entry.input then
-		-- If the entry requires user input, prompt the user.
-		vim.ui.input({
-			prompt = entry.name or entry.text,
-		}, function(input)
-			if input then
-				-- Call the handler with the provided input.
-				entry.handler(input)
-			else
-				-- Notify the user if no input is provided.
-				vim.notify("No input provided", vim.log.levels.WARN, {
-					title = parent .. " " .. entry.name or entry.text,
-				})
-			end
-		end)
+		M.menu(entry.options, entry.name or entry.text)
 	elseif entry.cmd then
 		-- Execute a Vim command, optionally silently.
-		local prefix = (entry.silent and "silent ") or ""
 		if entry.input then
-			vim.ui.input({
-				prompt = entry.text,
-			}, function(input)
-				if input then
-					-- replace "{input}" with the actual input
-					vim.cmd(prefix .. entry.cmd:gsub("{input}", input)
-				else
-					vim.notify("No input provided", vim.log.levels.WARN, {
-						title = parent .. " " .. entry.text,
-					})
-				end
+			ask_user(entry.input, function(input)
+				vim.cmd(prefix .. entry.cmd:gsub("{input}", input))
 			end)
 		else
 			vim.cmd(prefix .. entry.cmd)
 		end
 	elseif entry.command then
-		-- Execute a terminal command.
-		vim.cmd("terminal " .. entry.command)
+		if entry.input then
+			ask_user(entry.input, function(input)
+				vim.cmd("terminal " .. entry.command:gsub("{input}", input))
+			end)
+		else
+			vim.cmd("terminal " .. entry.command)
+		end
 	elseif entry.handler then
-		-- Call a custom handler function.
-		entry.handler()
+		if entry.input then
+			ask_user(entry.input, entry.handler)
+		else
+			entry.handler()
+		end
 	end
 end
 
