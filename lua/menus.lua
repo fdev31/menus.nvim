@@ -2,22 +2,22 @@ local M = { config = {} }
 
 local git_menu = { --{{{
 	{
-		text = " Add file",
+		name = " Add file",
 		cmd = '!git add "%"',
 	},
 	{
-		text = " Reset file",
+		name = " Reset file",
 		cmd = '!git reset HEAD "%"',
 	},
 } -- }}}
 
 local menusystem = {
 	{
-		text = " Git ▶",
+		name = " Git ▶",
 		options = git_menu,
 	},
-	{ text = " Silicon", cmd = "Silicon" },
-	{ text = " Copy diff", cmd = '!git diff "%" | wl-copy' },
+	{ name = " Silicon", cmd = "Silicon" },
+	{ name = " Copy diff", cmd = '!git diff "%" | wl-copy' },
 }
 
 --- Executes a menu entry based on its type.
@@ -34,11 +34,11 @@ local execute_entry = function(entry, parent)
 	end
 	if entry.options then
 		-- If the entry has sub-options, open a submenu.
-		M.menu(entry.options, entry.text)
+		M.menu(entry.options, entry.name)
 	elseif entry.input then
 		-- If the entry requires user input, prompt the user.
 		vim.ui.input({
-			prompt = entry.text,
+			prompt = entry.name or entry.text,
 		}, function(input)
 			if input then
 				-- Call the handler with the provided input.
@@ -46,7 +46,7 @@ local execute_entry = function(entry, parent)
 			else
 				-- Notify the user if no input is provided.
 				vim.notify("No input provided", vim.log.levels.WARN, {
-					title = parent .. " " .. entry.text,
+					title = parent .. " " .. entry.name or entry.text,
 				})
 			end
 		end)
@@ -64,19 +64,19 @@ local execute_entry = function(entry, parent)
 end
 
 --- Formats a menu entry for display.
--- This function determines the display text for a menu entry by prioritizing
--- the `text`, `command`, `cmd`, or defaults to "undefined" if none are provided.
+-- This function determines the display name for a menu entry by prioritizing
+-- the `name`, `command`, `cmd`, or defaults to "undefined" if none are provided.
 -- @param entry The menu entry to format. It should be a table containing optional keys:
---  - `text`, `command`, or `cmd`.
--- @return A string representing the formatted entry text.
+--  - `name`, `command`, or `cmd`.
+-- @return A string representing the formatted entry name.
 local _format_entry = function(entry)
-	return entry.text or entry.command or entry.cmd or "undefined"
+	return entry.name or entry.text or entry.command or entry.cmd or "undefined"
 end
 
 --- Displays a menu using the configured menu system
 --- @param options table|nil List of menu "entries". If nil, uses the default menusystem
 --- @param label string|nil The label for the menu. If nil, uses "Main menu"
---- @usage M.menu({{text = 'quit', cmd = 'quit'}, {text = 'world', command = 'echo world'}, {text = 'notify', handler = function() vim.notify('hello') end}})
+--- @usage M.menu({{name = 'quit', cmd = 'quit'}, {name = 'world', command = 'echo world'}, {name = 'notify', handler = function() vim.notify('hello') end}})
 M.menu = function(options, label)
 	options = options or menusystem
 	label = label or "Main menu"

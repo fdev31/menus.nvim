@@ -25,9 +25,9 @@ end, { desc = '[c]ommands' })
 -- inline
 vim.keymap.set({ 'n', 'v' }, '<leader>cd', function()
   require('menus').menu({
-    { text = ' line history', handler = package.loaded.snacks.picker.git_log_line },
-    { text = ' Add file', cmd = '!git add "%"' },
-    { text = '⏬Checkout branch', handler = package.loaded.snacks.picker.git_branches },
+    { name = ' line history', handler = package.loaded.snacks.picker.git_log_line },
+    { name = ' Add file', cmd = '!git add "%"' },
+    { name = '⏬Checkout branch', handler = package.loaded.snacks.picker.git_branches },
 
   })
 end, { desc = '[c]ommands' })
@@ -37,7 +37,7 @@ Assuming a `lua/custom/menus.lua` file is present, with a table having having pr
 
 Each **Entry** have the following properties:
 
-A `text`, which is the (mandatory) text to display, and one of:
+A `name`, which is the (mandatory) text to display, and one of:
 
 - `cmd` - (str) A vim command to execute
   - `silent` - (bool) will add the 'silent ' prefix to the `cmd` (will not output anything)
@@ -78,21 +78,21 @@ local openDiffViewMB = function(_, action)
 end
 
 M.git_compare_what = {
-  { text = 'Working copy', cmd = 'DiffviewOpen -uno' },
+  { name = 'Working copy', cmd = 'DiffviewOpen -uno' },
   {
-    text = 'Branch ▶',
+    name = 'Branch ▶',
     handler = function()
       telescope.git_branches { attach_mappings = openDiffView }
     end,
   },
   {
-    text = 'Commit ▶',
+    name = 'Commit ▶',
     handler = function()
       telescope.git_commits { attach_mappings = openDiffView }
     end,
   },
   {
-    text = 'Branch "merge base" (PR like) ▶',
+    name = 'Branch "merge base" (PR like) ▶',
     handler = function()
       telescope.git_branches { attach_mappings = openDiffViewMB }
     end,
@@ -101,7 +101,7 @@ M.git_compare_what = {
 
 M.git_menu = { --{{{
   {
-    text = ' Commit',
+    name = ' Commit',
     handler = function()
       require('diffview').close()
       vim.cmd ':terminal git commit'
@@ -109,35 +109,35 @@ M.git_menu = { --{{{
     end,
   },
   {
-    text = ' Amend',
+    name = ' Amend',
     cmd = '!git commit --amend --no-edit',
     silent = true,
   },
   -- {
-  --   text = ' Cached',
+  --   name = ' Cached',
   --   command = 'git diff --cached',
   -- },
   {
-    text = ' File history',
+    name = ' File history',
     handler = telescope.git_bcommits,
   },
   {
-    text = ' Line history',
+    name = ' Line history',
     handler = package.loaded.snacks.picker.git_log_line,
   },
   {
-    text = ' Reset file',
+    name = ' Reset file',
     cmd = '!git reset HEAD "%"',
   },
   {
-    text = ' Checkout branch',
+    name = ' Checkout branch',
     handler = telescope.git_branches,
   },
   {
-    text = ' Stash changes ▶',
+    name = ' Stash changes ▶',
     options = {
       {
-        text = ' Push',
+        name = ' Push',
         handler = function()
           vim.ui.input({
             prompt = 'Stash message: ',
@@ -146,24 +146,24 @@ M.git_menu = { --{{{
           end)
         end,
       },
-      { text = '󰋺 Apply', handler = telescope.git_stash },
+      { name = '󰋺 Apply', handler = telescope.git_stash },
     },
   },
 } -- }}}
 
 M.main_menu = {
   {
-    text = ' Git ▶',
+    name = ' Git ▶',
     options = M.git_menu,
   },
   {
-    text = ' DiffView ▶',
+    name = ' DiffView ▶',
     options = M.git_compare_what,
   },
-  { text = ' Runnables ▶', cmd = 'OverseerRun' },
-  { text = ' Silicon', cmd = "'<,'> Silicon" },
-  { text = ' Copy diff', cmd = '!git diff "%" | wl-copy'},
-  { text = ' Send to cra', cmd = '!scp "%" cra:/tmp' },
+  { name = ' Runnables ▶', cmd = 'OverseerRun' },
+  { name = ' Silicon', cmd = "'<,'> Silicon" },
+  { name = ' Copy diff', cmd = '!git diff "%" | wl-copy'},
+  { name = ' Send to cra', cmd = '!scp "%" cra:/tmp' },
 }
 
 return M
