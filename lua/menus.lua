@@ -20,7 +20,7 @@ local menusystem = {
 	{ text = " Copy diff", cmd = '!git diff "%" | wl-copy' },
 }
 
-local execute_entry = function(entry)
+local execute_entry = function(entry, parent)
 	if not entry then
 		return
 	end
@@ -32,6 +32,10 @@ local execute_entry = function(entry)
 		}, function(input)
 			if input then
 				entry.handler(input)
+			else
+				vim.notify("No input provided", vim.log.levels.WARN, {
+					title = parent .. " " .. entry.text,
+				})
 			end
 		end)
 	elseif entry.cmd then
@@ -59,7 +63,9 @@ M.menu = function(options, label)
 	vim.ui.select(options, {
 		prompt = label,
 		format_item = _format_entry,
-	}, execute_entry)
+	}, function(entry)
+		execute_entry(entry, label)
+	end)
 end
 
 M.setup = function(opts)
