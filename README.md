@@ -39,11 +39,12 @@ Each **Entry** have the following properties:
 
 A `text`, which is the (mandatory) text to display, and one of:
 
-- `cmd` - A vim command to execute
-  - `silent` - will add the 'silent ' prefix to the `cmd` (will not output anything)
-- `command` - A shell command to execute (in a **terminal** buffer)
-- `handler` - A function to execute
-- `options` - A list of entries to create a sub-menu
+- `cmd` - (str) A vim command to execute
+  - `silent` - (bool) will add the 'silent ' prefix to the `cmd` (will not output anything)
+- `command` - (str) A shell command to execute (in a **terminal** buffer)
+- `handler` - (function) code to execute
+  - `input` - (str) The title of the prompt asking for user input, which will be passed in handler
+- `options` - (table) A list of entries to create a sub-menu
 
 # Demo
 

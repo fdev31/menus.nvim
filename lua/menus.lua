@@ -26,6 +26,14 @@ local execute_entry = function(entry)
 	end
 	if entry.options then
 		M.menu(entry.options, entry.text)
+	elseif entry.input then
+		vim.ui.input({
+			prompt = entry.text,
+		}, function(input)
+			if input then
+				entry.handler(input)
+			end
+		end)
 	elseif entry.cmd then
 		local prefix = (entry.silent and "silent ") or ""
 		vim.cmd(prefix .. entry.cmd)
