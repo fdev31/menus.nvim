@@ -16,7 +16,7 @@ local menusystem = {
 		name = " Git ▶",
 		options = git_menu,
 	},
-	{ name = " Silicon", cmd = "Silicon" },
+	{ name = " Silicon", cmd = "'<,'>Silicon" },
 	{ name = " Copy diff", cmd = '!git diff "%" | wl-copy' },
 }
 
