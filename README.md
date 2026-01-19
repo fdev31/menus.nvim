@@ -53,7 +53,7 @@ A `name`, which is the (mandatory) text to display, and one of:
 
 [![menus.nvim demo](https://img.youtube.com/vi/BvoI3mE9rFs/0.jpg)](https://www.youtube.com/watch?v=BvoI3mE9rFs)
 
-Complete/real-life example (requires `snacks.picker` and `telescope`):
+Complete/real-life examples (requires `snacks.picker` and `telescope`) [here](https://github.com/fdev31/kickstart.nvim/blob/master/lua/config/menus.lua) and here:
 
 ```lua
 local M = {}
